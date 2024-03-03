@@ -184,20 +184,6 @@ fn main() {
             url_queue.len()
         );
 
-        // for worker in workers.iter() {
-        //     for dup in workers.iter() {
-        //         if worker.0 != dup.0
-        //             && worker.1.status == dup.1.status
-        //             && worker.1.status != WorkerStatus::WAITING
-        //         {
-        //             println!(
-        //                 "WTF! {}:{:?}, {}:{:?}",
-        //                 worker.0, worker.1.status, dup.0, dup.1.status
-        //             );
-        //         }
-        //     }
-        // }
-
         if num_waiting_workers == workers.len() {
             println!("All workers are waiting for work...\nEnding hopper");
             break;
@@ -206,6 +192,7 @@ fn main() {
 
     let duration = start.elapsed();
     println!("Time elapsed is: {:?}", duration);
+
     println!("Bytes downloaded: {}", total_bytes);
 
     for worker in workers {

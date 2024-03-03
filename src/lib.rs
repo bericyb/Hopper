@@ -105,8 +105,13 @@ fn is_same_host(root: &String, url: String) -> bool {
         Err(_) => return false,
     };
 
+    let host = match parsed_url.host_str() {
+        Some(host) => host,
+        None => return false,
+    };
+
     match Url::parse(&root) {
-        Ok(url) => url.host_str().unwrap() == parsed_url.host_str().unwrap(),
+        Ok(url) => url.host_str().unwrap() == host,
         Err(_) => false,
     }
 }
@@ -137,7 +142,11 @@ fn fetch_page(root: String, url: String) -> Result<(Vec<String>, usize), String>
             None => continue,
         };
         if href.starts_with("/") {
-            new_found_urls.push((root.clone() + href).to_string());
+            let mut link = href.to_string();
+            if link.len() > 0 && root.ends_with("/") {
+                link.remove(0);
+            }
+            new_found_urls.push(root.clone() + &link);
         } else if href.starts_with("mailto:")
             || href.starts_with("javascript")
             || href.starts_with("tel")
